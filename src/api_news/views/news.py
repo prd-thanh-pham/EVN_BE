@@ -17,9 +17,9 @@ class NewsModelViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 news_data = NewsService.create_list_news(data)
-                news_objs = News.objects.bulk_create(news_data)
+                news_objs = News.objects.bulk_create(news_data, ignore_conflicts=True)
                 image_data = ImageService.create_list_image(data, news_objs)
-                Image.objects.bulk_create(image_data)
+                Image.objects.bulk_create(image_data, ignore_conflicts=True)
             return Response(
                 {"success": "Crawl data is success"},
                 status=status.HTTP_201_CREATED,

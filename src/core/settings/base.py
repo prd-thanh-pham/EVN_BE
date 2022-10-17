@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import datetime
 from pathlib import Path
 import os
-from . import env, BASE_DIR
+from . import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = (
     "drf_yasg",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    "django_crontab",
     "rest_framework",
     "rest_framework_simplejwt",
 )
@@ -185,6 +186,16 @@ STATIC_ROOT = "static"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+CRONJOBS = [
+    ("* * * * *", "api_news.cron_tab.crawl_every_day")
+]
+
+REST_FRAMEWORK = {
+  'DEFAULT_PERMISSION_CLASSES': [
+      'rest_framework.permissions.AllowAny',
+  ],
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
