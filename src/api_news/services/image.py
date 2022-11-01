@@ -11,8 +11,8 @@ class ImageService(BaseService):
             for img in images:
                 item = {
                     "news": news_objs[_idx],
-                    "title": img["title"],
-                    "src": img["src"],
+                    "title": img.get("title"),
+                    "src": img.get("src"),
                 }
                 image_data.append(item)
         image_objs = (Image(**img) for img in image_data)

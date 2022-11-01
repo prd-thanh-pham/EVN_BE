@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 from api.services import BaseService
 from utils.utils import Util
-import functools
 
 
 class CrawlService(BaseService):
@@ -12,13 +11,14 @@ class CrawlService(BaseService):
         page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
         hot_new = soup.find('div', class_='item').find('a')
-        titles = [hot_new.get('title')]
         links = [hot_new.get('href')]
         new_feeds = soup.find_all('h3', class_='title-news13 mt5')
         for i in new_feeds:
             a = i.find('a')
-            titles.append(a.get('title'))
             links.append((a.get('href')))
+        bottom_news = soup.find_all('div', class_='blog-medium')
+        for item in bottom_news:
+            links.append(item.find('a').get('href'))
         arr_news = []
         for item in links:
             page_detail = requests.get(url + item)
@@ -31,9 +31,7 @@ class CrawlService(BaseService):
                 "post_at": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_lblAproved').text,
                 "author": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_LabelAuthor').text
             }
-            body = soup_detail.find('div', class_='col-lg-12 col-md-12 col-sm-12 col-xs-12')
             paragraph = soup_detail.find_all('p', style="text-align:justify")
-            # news["contents"] = list(map(lambda x: Util.remove_space(x.text), paragraph))
             news["content"] = '<br>'.join(list(map(lambda x: Util.remove_space(x.text), paragraph)))
             news["images"] = []
             images = soup_detail.select('tbody tr td')

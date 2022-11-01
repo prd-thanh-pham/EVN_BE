@@ -11,11 +11,11 @@ class News(TimeStampedModel):
     thumbnail = models.CharField(max_length=255, blank=True)
     # topic = models.ForeignKey(Topic, related_name="news", on_delete=models.SET_NULL, null=True, blank=True)
     # source = models.ForeignKey(Source, related_name="news", on_delete=models.SET_NULL, null=True, blank=True)
-    source = models.CharField(max_length=255, blank=True)
+    source = models.CharField(max_length=255, blank=True, unique=True)
     content = models.TextField(blank=True)
     author = models.CharField(max_length=255, blank=True)
     excerpt = models.CharField(max_length=255, blank=True)
 
     class Meta:
         db_table = "evn_news"
-        ordering = ["-created_at"]
+        ordering = ["-post_at"]
