@@ -1,26 +1,35 @@
 version: '3'
-
 services:
   db:
     image: mysql:8
+    restart: always
     ports:
       - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      - MYSQL_DATABASE='EVN'
-      - MYSQL_USER='root'
-      - MYSQL_PASSWORD='thanh123'
-      - MYSQL_ROOT_PASSWORD='thanh123'
-      - MYSQL_HOST=''
+      - MYSQL_DATABASE=EVN
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=thanh123
+      - MYSQL_ROOT_PASSWORD=thanh123
+      - MYSQL_ROOT_HOST='%'
     volumes:
-      - /var/lib/mysql:/var/run/mysql
       - ./db:/var/lib/mysql
+
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - db
+
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-      - /tmp/app/mysql:/run/mysql
+      - /tmp/app/mysqld:/run/mysqld
     depends_on:
       - db
