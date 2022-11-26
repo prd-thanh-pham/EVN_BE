@@ -1,3 +1,5 @@
 from .news import NewsSerializer
 from .topic import TopicSerializer
-from .source import SourceSerializer
+from .image import ImageSerializer
+from .content import ContentSerializer
+from .keyword import KeywordSerializer

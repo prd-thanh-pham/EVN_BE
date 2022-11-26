@@ -7,12 +7,13 @@ class ImageService(BaseService):
     def create_list_image(cls, data, news_objs):
         image_data = []
         for _idx, news in enumerate(data):
-            images = news.get("images")
+            images = news.get("image")
             for img in images:
                 item = {
                     "news": news_objs[_idx],
                     "title": img.get("title"),
                     "src": img.get("src"),
+                    "order": img.get("order"),
                 }
                 image_data.append(item)
         image_objs = (Image(**img) for img in image_data)

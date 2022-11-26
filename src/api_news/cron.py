@@ -1,5 +1,6 @@
 import datetime
 import logging
+
 logger = logging.getLogger(__name__)
 from django.db import transaction
 from api_news.models import News, Image, Topic
@@ -23,4 +24,3 @@ def crawl_every_day():
     #     Image.objects.bulk_create(image_data, ignore_conflicts=True)
 
     # print(2)
-
