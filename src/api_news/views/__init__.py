@@ -1,3 +1,3 @@
 from .news import NewsModelViewSet
-from .source import SourceModelViewSet
+from .image import ImageModelViewSet
 from .topic import TopicModelViewSet
