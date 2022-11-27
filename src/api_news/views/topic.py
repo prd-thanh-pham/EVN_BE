@@ -6,4 +6,3 @@ from api_news.serializers import TopicSerializer
 class TopicModelViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
-    # pagination_class = PageNumberPagination

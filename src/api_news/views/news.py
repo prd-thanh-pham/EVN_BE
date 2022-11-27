@@ -1,11 +1,6 @@
-from django.core.paginator import Paginator
 from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.views import APIView
-
-from api.pagination import CustomPagination
 from api_news.services import (
     CrawlService,
     NewsService,
