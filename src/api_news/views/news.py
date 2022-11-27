@@ -1,7 +1,9 @@
+from django.core.paginator import Paginator
 from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.views import APIView
 
 from api.pagination import CustomPagination
 from api_news.services import (
@@ -19,8 +21,6 @@ from rest_framework.response import Response
 class NewsModelViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    # pagination_class = PageNumberPagination
-    # page_size = 10
 
     @action(methods=["get"], detail=False)
     def crawl(self, request, *args, **kwargs):

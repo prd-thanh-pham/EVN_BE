@@ -13,7 +13,6 @@ import datetime
 from pathlib import Path
 import os
 from . import env
-import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,6 +132,9 @@ DATABASES = {
 # }
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
@@ -191,18 +193,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-APP_LOG_FILENAME = os.path.join(BASE_DIR, "log/app.log")
-ERROR_LOG_FILENAME = os.path.join(BASE_DIR, "log/error.log")
 
 CRONJOBS = [("* * * * *", "api_news.cron.crawl_every_day")]
 
 CRONTAB_COMMAND_SUFFIX = "2> & 1"
-
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
