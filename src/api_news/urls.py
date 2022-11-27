@@ -8,4 +8,3 @@ router.register(r"news", NewsModelViewSet, basename="news")
 router.register(r"topic", TopicModelViewSet, basename="topic")
 
 urlpatterns = router.urls
-
