@@ -41,4 +41,4 @@ blocks:
         - name: Style
           commands:
             - pip install flake8
-            - '#flake8 src/ --max-line-length=127'
+            - flake8 src/ --max-line-length=127
