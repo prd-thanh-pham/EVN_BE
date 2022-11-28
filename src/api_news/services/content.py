@@ -11,7 +11,7 @@ class ContentService(BaseService):
             for content in contents:
                 item = {
                     "news": news_objs[_idx],
-                    "paragraph": content.get("title"),
+                    "paragraph": content.get("paragraph"),
                     "order": content.get("order"),
                 }
                 content_data.append(item)
