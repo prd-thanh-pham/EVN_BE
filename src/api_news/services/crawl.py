@@ -22,54 +22,39 @@ class CrawlService(BaseService):
             link = root_url + item.find("a").get("href")
             page_detail = requests.get(link)
             soup_detail = BeautifulSoup(page_detail.content, "html.parser")
-            content = soup_detail.find(id="ContentPlaceHolder1_ctl00_159_FullDescirbe")
             news = {
-                "title": soup_detail.find(
-                    id="ContentPlaceHolder1_ctl00_159_ltlTitle"
-                ).text,
-                "post_at": soup_detail.find(
-                    id="ContentPlaceHolder1_ctl00_159_lblAproved"
-                ).text,
-                "thumbnail": root_url + thumbnails[idx].get("src"),
-                "source": link,
-                "author": soup_detail.find(
-                    id="ContentPlaceHolder1_ctl00_159_LabelAuthor"
-                ).text,
-                "excerpt": Util.remove_space(soup_detail.find("strong").text),
-                "gists": list(
-                    map(
-                        lambda x: Util.remove_space(x.text),
-                        soup_detail.find_all("strong"),
-                    )
-                ),
+                "source": root_url + links[0].find('a').get('href'),
+                "title": Util.remove_space(soup_detail.find(id="ContentPlaceHolder1_ctl00_159_ltlTitle").text),
+                "except": Util.remove_space(soup_detail.find('strong').text),
+                "thumbnails": root_url + thumbnails[idx].get("src"),
                 "content": [],
+                "post_at": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_lblAproved').text,
+                "author": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_LabelAuthor').text,
                 "keyword": list(
-                    map(
-                        lambda x: x.text,
-                        soup_detail.find(
-                            "ul", class_="list-unstyled list-inline blog-tags"
-                        ).find_all("a"),
-                    )
-                ),
-                "image": [],
+                    map(lambda x: x.text,
+                        soup_detail.find('ul', class_='list-unstyled list-inline blog-tags').find_all('a'))),
             }
-            p = ""
+            content = soup_detail.find(id="ContentPlaceHolder1_ctl00_159_FullDescirbe")
             i = 0
-            for _idx, child in enumerate(content):
-                if isinstance(child, Tag) and child.name == "p":
-                    p += Util.remove_space(child.text) + "<br>"
-                elif isinstance(child, Tag) and child.name == "table":
-                    news["content"].append({"paragraph": p, "order": i})
-                    image = {
-                        "title": Util.remove_space(child.find("td").text),
-                        "order": i,
-                    }
-                    if type(child.find("img")) != type(None):
-                        image["src"] = root_url + child.find("img").get("src")
-                    news["image"].append(image)
-                    p = ""
+            item = {"title": "", "paragraph": "", "description_img": "", "image": "", "order": i}
+            for child in content:
+                if isinstance(child, Tag) and child.name == 'p':
+                    if type(child.find('strong')) != type(None):
+                        if item["title"]:
+                            news["content"].append(item)
+                            i = i + 1
+                            item = {"title": "", "paragraph": "", "description_img": "", "image": "", "order": i}
+                        item["title"] = Util.remove_space(child.text)
+                    else:
+                        item["paragraph"] += Util.remove_space(child.text) + "<br>"
+                elif isinstance(child, Tag) and child.name == 'table':
+                    item["description_img"] = Util.remove_space(child.find('td').text)
+                    if type(child.find('img')) != type(None):
+                        item["image"] = root_url + child.find("img").get("src")
+                    news["content"].append(item)
                     i = i + 1
-            if p:
-                news["content"].append({"paragraph": p, "order": i})
+                    item = {"title": "", "paragraph": "", "description_img": "", "image": "", "order": i}
+            if item["title"]:
+                news["content"].append(item)
             arr_news.append(news)
         return arr_news
