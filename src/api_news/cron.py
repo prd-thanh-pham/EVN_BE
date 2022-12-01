@@ -3,8 +3,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 from django.db import transaction
-from api_news.models import News, Image, Topic
-from api_news.services import CrawlService, NewsService, ImageService
+from api_news.models import News, Topic
+from api_news.services import CrawlService, NewsService
 
 
 def crawl_every_day():
