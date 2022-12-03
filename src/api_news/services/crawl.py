@@ -25,8 +25,8 @@ class CrawlService(BaseService):
             news = {
                 "source": link,
                 "title": Util.remove_space(soup_detail.find(id="ContentPlaceHolder1_ctl00_159_ltlTitle").text),
-                "except": Util.remove_space(soup_detail.find('strong').text),
-                "thumbnails": root_url + thumbnails[idx].get("src"),
+                "excerpt": Util.remove_space(soup_detail.find('strong').text),
+                "thumbnail": root_url + thumbnails[idx].get("src"),
                 "content": [],
                 "post_at": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_lblAproved').text,
                 "author": soup_detail.find(id='ContentPlaceHolder1_ctl00_159_LabelAuthor').text,
