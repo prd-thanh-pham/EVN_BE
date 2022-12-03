@@ -23,7 +23,7 @@ class CrawlService(BaseService):
             page_detail = requests.get(link)
             soup_detail = BeautifulSoup(page_detail.content, "html.parser")
             news = {
-                "source": root_url + links[0].find('a').get('href'),
+                "source": link,
                 "title": Util.remove_space(soup_detail.find(id="ContentPlaceHolder1_ctl00_159_ltlTitle").text),
                 "except": Util.remove_space(soup_detail.find('strong').text),
                 "thumbnails": root_url + thumbnails[idx].get("src"),
@@ -54,7 +54,7 @@ class CrawlService(BaseService):
                     news["content"].append(item)
                     i = i + 1
                     item = {"title": "", "paragraph": "", "description_img": "", "image": "", "order": i}
-            if item["title"]:
+            if item["paragraph"]:
                 news["content"].append(item)
             arr_news.append(news)
         return arr_news
