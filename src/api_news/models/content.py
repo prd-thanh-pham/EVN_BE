@@ -5,9 +5,7 @@ from api_news.models import News
 
 
 class Content(models.Model):
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.TextField(blank=True)
     paragraph = models.TextField(blank=True)
     description_img = models.TextField(blank=True)

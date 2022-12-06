@@ -35,6 +35,4 @@ class NewsModelViewSet(viewsets.ModelViewSet):
                 return Response(
                     {"error_msg": str(e)}, status=status.HTTP_400_BAD_REQUEST
                 )
-        return Response(
-            {"success": "Crawl data is success"}, status=status.HTTP_200_OK
-        )
+        return Response({"success": "Crawl data is success"}, status=status.HTTP_200_OK)

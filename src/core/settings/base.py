@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "django_crontab",
     "rest_framework",
+    "django_filters",
 )
 LOCAL_APPS = ("api", "api_news")
 
@@ -118,25 +119,13 @@ DATABASES = {
     # REPLICATION_DB_ALIAS: db_config(REPLICATION_PREFIX),
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "djongo",
-#         "CLIENT": {
-#             "host": "mongodb+srv://pdthanh:thanh123@database.r4fw4yh.mongodb.net/?retryWrites=true&w=majority",
-#             "name": "evn-db",
-#             "authMechanism": "SCRAM-SHA-256"
-#         }
-#     },
-#     "tests": db_config("", {"MIRROR": "default"}),
-#     # REPLICATION_DB_ALIAS: db_config(REPLICATION_PREFIX),
-# }
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 ALLOWED_SWAGGER = env("ALLOWED_SWAGGER")
