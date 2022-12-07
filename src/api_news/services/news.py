@@ -6,7 +6,9 @@ class NewsService(BaseService):
     @classmethod
     def create_list_news(cls, arr_news, topic):
         in_db_sources = topic.news.values_list("source", flat=True)
-        source_crawl = list(filter(lambda x: x.get("source") not in in_db_sources, arr_news))
+        source_crawl = list(
+            filter(lambda x: x.get("source") not in in_db_sources, arr_news)
+        )
         if source_crawl:
             objs = (
                 News(
