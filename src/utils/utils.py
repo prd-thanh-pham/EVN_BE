@@ -25,5 +25,5 @@ class Util:
 
     @staticmethod
     def remove_space(string):
-        string = string.replace(u'\xa0', u' ').strip()
+        string = string.replace("\xa0", " ").strip()
         return string

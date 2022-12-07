@@ -13,7 +13,6 @@ import datetime
 from pathlib import Path
 import os
 from . import env
-import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,12 +49,8 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "django_crontab",
     "rest_framework",
-    "django_celery_beat",
 )
-LOCAL_APPS = (
-    "api",
-    "api_news"
-)
+LOCAL_APPS = ("api", "api_news")
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -92,7 +87,6 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Custom user model
 # AUTH_USER_MODEL = "api_users.User"
-DB_NAME = "EVN"
 
 
 # Database
@@ -124,13 +118,25 @@ DATABASES = {
     # REPLICATION_DB_ALIAS: db_config(REPLICATION_PREFIX),
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "djongo",
+#         "CLIENT": {
+#             "host": "mongodb+srv://pdthanh:thanh123@database.r4fw4yh.mongodb.net/?retryWrites=true&w=majority",
+#             "name": "evn-db",
+#             "authMechanism": "SCRAM-SHA-256"
+#         }
+#     },
+#     "tests": db_config("", {"MIRROR": "default"}),
+#     # REPLICATION_DB_ALIAS: db_config(REPLICATION_PREFIX),
+# }
+
 REST_FRAMEWORK = {
-    "NON_FIELD_ERRORS_KEY": "error",
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 50,
+    "PAGE_SIZE": 10,
 }
 
 ALLOWED_SWAGGER = env("ALLOWED_SWAGGER")
@@ -187,53 +193,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-APP_LOG_FILENAME = os.path.join(BASE_DIR, 'log/app.log')
-ERROR_LOG_FILENAME = os.path.join(BASE_DIR, 'log/error.log')
 
-CRONJOBS = [
-    ("* * * * *", "api_news.cron.crawl_every_day")
-]
+CRONJOBS = [("* * * * *", "api_news.cron.crawl_every_day")]
 
-CRONTAB_COMMAND_SUFFIX = '2> & 1'
-
-REST_FRAMEWORK = {
-  'DEFAULT_PERMISSION_CLASSES': [
-      'rest_framework.permissions.AllowAny',
-  ],
-}
-
-
-#
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'console': {
-#             'format': '%(name)-12s %(levelname)-8s %(message)s'
-#         },
-#         'file': {
-#           'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-#         }
-#     },
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'console',
-#         },
-#         'file': {
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'log/app.log'),
-#             'formatter': 'file',
-#             'level': 'DEBUG',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file', 'console'],
-#             'level': 'DEBUG'
-#         },
-#     },
-# }
+CRONTAB_COMMAND_SUFFIX = "2> & 1"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
