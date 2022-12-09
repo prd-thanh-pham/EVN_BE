@@ -13,5 +13,5 @@ class TopicModelViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         if pk:
             queryset = Topic.objects.filter(id=pk)
-        serializer = TopicDetailSerializer(queryset[0], many=True)
+        serializer = TopicDetailSerializer(queryset[0])
         return Response(serializer.data, status=status.HTTP_200_OK)
