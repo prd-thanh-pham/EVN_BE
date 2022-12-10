@@ -1,7 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+from django.db import transaction
 from api.services import BaseService
 from bs4.element import Tag
+from api_news.models import Topic, News, Content, Keyword
+from .news import NewsService
+from .content import ContentService
+from .keyword import KeywordService
 from utils.utils import Util
 
 
@@ -87,3 +92,23 @@ class CrawlService(BaseService):
                 news["content"].append(item)
             arr_news.append(news)
         return arr_news
+
+    @classmethod
+    def thread_crawl(cls):
+        list_topic = Topic.objects.all()
+        for topic in list_topic:
+            print("Crawl in url ", topic.source)
+            data = CrawlService.crawl_from_url(topic.source)
+            try:
+                with transaction.atomic():
+                    data, news_data = NewsService.create_list_news(data, topic)
+                    news_objs = News.objects.bulk_create(
+                        news_data, ignore_conflicts=True
+                    )
+                    content_data = ContentService.create_list_content(data, news_objs)
+                    keyword_data = KeywordService.create_list_keyword(data, news_objs)
+                    Content.objects.bulk_create(content_data, ignore_conflicts=True)
+                    Keyword.objects.bulk_create(keyword_data, ignore_conflicts=True)
+            except Exception as e:
+                print("Error: ", e)
+        print("Crawl finished")
