@@ -1,3 +1,4 @@
+import after_response
 import requests
 from bs4 import BeautifulSoup
 from django.db import transaction
@@ -93,8 +94,8 @@ class CrawlService(BaseService):
             arr_news.append(news)
         return arr_news
 
-    @classmethod
-    def thread_crawl(cls):
+    @after_response.enable
+    def thread_crawl():
         list_topic = Topic.objects.all()
         for topic in list_topic:
             print("Crawl in url ", topic.source)
@@ -111,4 +112,3 @@ class CrawlService(BaseService):
                     Keyword.objects.bulk_create(keyword_data, ignore_conflicts=True)
             except Exception as e:
                 print("Error: ", e)
-        print("Crawl finished")

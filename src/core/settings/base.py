@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = (
     "corsheaders",
     "rest_framework",
     "django_filters",
+    "after_response",
 )
 LOCAL_APPS = ("api", "api_news")
 
@@ -113,9 +114,10 @@ def db_config(prefix="", test=None):
 
 
 DATABASES = {
-    "default": db_config(),
-    "tests": db_config("", {"MIRROR": "default"}),
-    # REPLICATION_DB_ALIAS: db_config(REPLICATION_PREFIX),
+    'default': {
+        'ENGINE': "django.db.backends.sqlite3",
+        'NAME': os.path.join(BASE_DIR, "db.sqlite3"),
+    }
 }
 
 REST_FRAMEWORK = {
@@ -133,11 +135,6 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
         "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
     }
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
 }
 
 # Password validation
@@ -185,12 +182,3 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-FRONTEND_HOST = env("FRONTEND_HOST")
-
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_POST = env("EMAIL_POST")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
